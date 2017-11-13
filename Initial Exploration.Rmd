@@ -1,0 +1,51 @@
+---
+title: "Exploration"
+runtime: shiny
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include = FALSE}
+library(plotly)
+library(data.table)
+load('RawData.rda')
+```
+
+```{r, echo=FALSE}
+
+inputPanel(
+  selectInput("Column_Index", label = "Index of Attribute",
+              choices = colnames(Raw_Train), selected = "V_product_type")
+)
+
+renderPlot({
+
+  column = input$Column_Index
+  data = Raw_Train
+  p<-ggplot(data, aes(x = eval(parse(text = column)), y = V_price_doc)) +
+     geom_smooth() +
+     geom_bar(stat="summary",fun.y="mean") +
+     xlab(column)+ylab("Sale Price")
+  p
+  
+})
+
+renderPrint({
+  column = input$Column_Index
+ print (Dict[Variable == column, Meaning])
+ summary(Raw_Train[,eval(parse(text = column))])
+
+})
+```
+
+## Summary of attribute
+
+```{r}
+
+```
+
+
+
